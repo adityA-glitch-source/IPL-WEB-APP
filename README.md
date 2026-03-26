@@ -1,48 +1,57 @@
-# IPL-WEB-APP
-A web interface for IPL statistics built with Flask, Jinja2, and HTML, powered by the IPL_API.
-🏏 IPL-WEB-APP
+# IPL Web App
 
-A web interface for IPL statistics built with Flask, Jinja2, and HTML, powered by the IPL_API.
+A Flask web application displaying IPL statistics for the 2008–2022 seasons. Built on top of the [IPL API](https://github.com/yourusername/ipl_api) with a dark-themed UI, real-time data rendering, and modular Flask routing.
 
-📌 Project Overview
+## Tech Stack
 
-IPL-WEB-APP is a web application that provides a user-friendly interface to query IPL statistics.
-It connects with the IPL_API (from the previous project) to fetch records and display them on a webpage.
+- Python, Flask, Jinja2
+- Pandas (via IPL API)
+- HTML, CSS (custom dark theme)
 
-The app uses Flask with Jinja2 templating and HTML to create an interactive interface where users can select two IPL teams from dropdown menus. On clicking the “Find the Record” button, the app makes a request to the teamVsteam API and displays the head-to-head result directly on the webpage.
+## Pages
 
-⚡ Features
+| Route | Description |
+|-------|-------------|
+| `/` | Home — IPL champions history |
+| `/teamvteam` | Head-to-head record between any two teams |
+| `/team` | Full team record + win/loss vs every opponent |
+| `/batsman` | Batsman career stats + performance vs each team |
+| `/bowler` | Bowler career stats + performance vs each team |
+| `/season` | Season overview — runs, wickets, top performers |
 
-Dropdown menu to select Team 1 and Team 2.
+## Setup
 
-Button to fetch and display head-to-head records.
+This app depends on the IPL API running locally. Start the API first:
 
-Integration with IPL_API for real-time data.
+```bash
+# Terminal 1 — API (port 5000)
+cd ipl_api
+python app.py
 
-Clean UI with Jinja2 templating for dynamic rendering.
+# Terminal 2 — Web app (port 8080)
+cd ipl_webapp
+python app.py
+```
 
-🛠️ Tech Stack
+Then open `http://localhost:8080` in your browser.
 
-Flask (Backend Framework)
+## Project Structure
 
-Jinja2 (Templating Engine)
+```
+ipl_webapp/
+├── app.py                  # Flask routes, API calls
+└── templates/
+    ├── base.html           # Shared layout, nav, CSS
+    ├── index.html          # Home page
+    ├── teamvteam.html      # Head-to-head page
+    ├── team.html           # Team record page
+    ├── batsman.html        # Batsman stats page
+    ├── bowler.html         # Bowler stats page
+    └── season.html         # Season stats + top performers
+```
 
-HTML / CSS (Frontend UI)
+## Key Design Decisions
 
-IPL_API (Data Source)
-
-📂 Project Structure
-IPL-WEB-APP/
-│── app.py              # Flask app
-│── templates/
-│   └── index.html      # Main page with dropdowns (Jinja2 templating)
-│── static/             # (Optional) CSS, JS, images
-│── README.md           # Project documentation
-
-✨ Future Improvements
-
-Add team-wise batting & bowling stats to the UI.
-
-Display charts/graphs for better visualization.
-
-Deploy the app with both API + UI on the cloud.
+- **Modular routing** — each page is a separate Flask route with its own template, making it easy to add new pages independently.
+- **API-first architecture** — the web app never touches the data directly. All data comes through the IPL API, keeping the two repos fully decoupled.
+- **Graceful error handling** — if the API is down or returns no data, pages show an empty state instead of crashing.
