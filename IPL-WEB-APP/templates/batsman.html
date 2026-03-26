@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Batsman Stats — IPL Stats{% endblock %}
+{% block content %}
+<h1 class="page-title">Batsman <span>Stats</span></h1>
+
+<div class="card">
+  <form method="get" action="/batsman">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Player Name</label>
+        <input type="text" name="batsman" value="{{ name }}" placeholder="e.g. V Kohli"/>
+      </div>
+      <button type="submit" class="btn">Search</button>
+    </div>
+  </form>
+
+  {% if result and result.all %}
+  {% set s = result.all %}
+  <div class="section-head">{{ name }} — Career</div>
+  <div class="stat-grid" style="margin-top:.8rem">
+    <div class="stat-box"><div class="val">{{ s.innings }}</div><div class="lbl">Innings</div></div>
+    <div class="stat-box"><div class="val">{{ s.runs }}</div><div class="lbl">Runs</div></div>
+    <div class="stat-box"><div class="val">{{ s.highestScore }}</div><div class="lbl">Highest</div></div>
+    <div class="stat-box"><div class="val">{{ "%.1f"|format(s.average) if s.average != "inf" else "—" }}</div><div class="lbl">Average</div></div>
+    <div class="stat-box"><div class="val">{{ "%.1f"|format(s.strikeRate) }}</div><div class="lbl">Strike Rate</div></div>
+    <div class="stat-box"><div class="val">{{ s.fifties }}</div><div class="lbl">Fifties</div></div>
+    <div class="stat-box"><div class="val">{{ s.hundreds }}</div><div class="lbl">Hundreds</div></div>
+    <div class="stat-box"><div class="val">{{ s.fours }}</div><div class="lbl">Fours</div></div>
+    <div class="stat-box"><div class="val">{{ s.sixes }}</div><div class="lbl">Sixes</div></div>
+    <div class="stat-box"><div class="val">{{ s.notOut }}</div><div class="lbl">Not Out</div></div>
+    <div class="stat-box"><div class="val">{{ s.mom }}</div><div class="lbl">MOM Awards</div></div>
+  </div>
+
+  {% if result.against %}
+  <div class="section-head" style="margin-top:1.5rem">Performance vs Each Team</div>
+  <table style="margin-top:.8rem">
+    <thead>
+      <tr><th>Team</th><th>Innings</th><th>Runs</th><th>Avg</th><th>SR</th><th>50s</th><th>100s</th></tr>
+    </thead>
+    <tbody>
+      {% for team, r in result.against.items()|sort %}
+      {% if r and r.innings %}
+      <tr>
+        <td>{{ team }}</td>
+        <td>{{ r.innings }}</td>
+        <td>{{ r.runs }}</td>
+        <td>{{ "%.1f"|format(r.average) if r.average != None and r.average|string != 'inf' else "—" }}</td>
+        <td>{{ "%.1f"|format(r.strikeRate) if r.strikeRate else "0.0" }}</td>
+        <td>{{ r.fifties }}</td>
+        <td>{{ r.hundreds }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% elif name %}
+  <div class="empty">No data found for "{{ name }}". Check spelling — use initials format e.g. "V Kohli".</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,35 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>IPL-WEB-APP</title>
-</head>
-<body>
-<h1>Team VS Team</h1>
-<form action="/teamvteam" method = 'get'>
-    <label>select Team 1</label>
-    <select name = 'team1'>
-        {%for item in teams%}
-            <option>{{item}}</option>
-        {% endfor %}
+{% extends "base.html" %}
+{% block title %}IPL Stats — Home{% endblock %}
+{% block content %}
+<h1 class="page-title"><span>IPL</span> Statistics Dashboard</h1>
 
+<div class="card">
+  <div class="card-title">Explore Stats</div>
+  <div class="stat-grid">
+    <a href="/teamvteam" style="text-decoration:none">
+      <div class="stat-box" style="cursor:pointer">
+        <div class="val">H2H</div>
+        <div class="lbl">Head-to-Head</div>
+      </div>
+    </a>
+    <a href="/team" style="text-decoration:none">
+      <div class="stat-box" style="cursor:pointer">
+        <div class="val">🏏</div>
+        <div class="lbl">Team Records</div>
+      </div>
+    </a>
+    <a href="/batsman" style="text-decoration:none">
+      <div class="stat-box" style="cursor:pointer">
+        <div class="val">BAT</div>
+        <div class="lbl">Batsman Stats</div>
+      </div>
+    </a>
+    <a href="/bowler" style="text-decoration:none">
+      <div class="stat-box" style="cursor:pointer">
+        <div class="val">BOWL</div>
+        <div class="lbl">Bowler Stats</div>
+      </div>
+    </a>
+    <a href="/season" style="text-decoration:none">
+      <div class="stat-box" style="cursor:pointer">
+        <div class="val">📅</div>
+        <div class="lbl">Season Stats</div>
+      </div>
+    </a>
+  </div>
+</div>
 
-    </select> <BR> <BR>
-
-    <label>select Team 2</label>
-    <select name="team2">
-        {%for item in teams%}
-            <option>{{item}}</option>
-        {%endfor%}
-
-
-    </select> <br> <br>
-   <input type = "submit" value="Find Track Record"/>
-    {%if result%}
-      {%for i in result%}
-         <p>{{i}} : {{result[i]}}</p>
-      {%endfor%}
-    {%endif%}
-</form>
-</body>
-</html>
+{% if champions %}
+<div class="card">
+  <div class="card-title">IPL Champions (2008 – 2022)</div>
+  <table>
+    <thead><tr><th>Season</th><th>Champion</th></tr></thead>
+    <tbody>
+      {% for season, winner in champions.items()|sort %}
+      <tr>
+        <td><span class="badge">{{ season }}</span></td>
+        <td>{{ winner }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

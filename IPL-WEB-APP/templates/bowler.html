@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Bowler Stats — IPL Stats{% endblock %}
+{% block content %}
+<h1 class="page-title">Bowler <span>Stats</span></h1>
+
+<div class="card">
+  <form method="get" action="/bowler">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Player Name</label>
+        <input type="text" name="bowler" value="{{ name }}" placeholder="e.g. JJ Bumrah"/>
+      </div>
+      <button type="submit" class="btn">Search</button>
+    </div>
+  </form>
+
+  {% if result and result.all %}
+  {% set s = result.all %}
+  <div class="section-head">{{ name }} — Career</div>
+  <div class="stat-grid" style="margin-top:.8rem">
+    <div class="stat-box"><div class="val">{{ s.innings }}</div><div class="lbl">Innings</div></div>
+    <div class="stat-box"><div class="val">{{ s.wickets }}</div><div class="lbl">Wickets</div></div>
+    <div class="stat-box"><div class="val">{{ "%.2f"|format(s.economy) }}</div><div class="lbl">Economy</div></div>
+    <div class="stat-box"><div class="val">{{ "%.1f"|format(s.average) if s.average != None and s.average|string != 'inf' else "—" }}</div><div class="lbl">Average</div></div>
+    <div class="stat-box"><div class="val">{{ s.bestFigure }}</div><div class="lbl">Best Figure</div></div>
+    <div class="stat-box"><div class="val">{{ s['3+W'] }}</div><div class="lbl">3+ Wicket Hauls</div></div>
+    <div class="stat-box"><div class="val">{{ s.mom }}</div><div class="lbl">MOM Awards</div></div>
+  </div>
+
+  {% if result.against %}
+  <div class="section-head" style="margin-top:1.5rem">Performance vs Each Team</div>
+  <table style="margin-top:.8rem">
+    <thead>
+      <tr><th>Team</th><th>Innings</th><th>Wickets</th><th>Economy</th><th>Avg</th><th>Best</th></tr>
+    </thead>
+    <tbody>
+      {% for team, r in result.against.items()|sort %}
+      {% if r and r.innings %}
+      <tr>
+        <td>{{ team }}</td>
+        <td>{{ r.innings }}</td>
+        <td>{{ r.wickets }}</td>
+        <td>{{ "%.2f"|format(r.economy) }}</td>
+        <td>{{ "%.1f"|format(r.average) if r.average != None and r.average|string != 'inf' else "—" }}</td>
+        <td>{{ r.bestFigure }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% elif name %}
+  <div class="empty">No data found for "{{ name }}". Check spelling — use initials format e.g. "JJ Bumrah".</div>
+  {% endif %}
+</div>
+{% endblock %}
