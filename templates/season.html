@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Season Stats — IPL Stats{% endblock %}
+{% block content %}
+<h1 class="page-title">Season <span>Stats</span></h1>
+
+<div class="card">
+  <form method="get" action="/season">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Season</label>
+        <select name="season">
+          <option value="">All Time</option>
+          {% for s in seasons %}
+          <option {% if s == selected %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn">View</button>
+    </div>
+  </form>
+
+  {% if stats %}
+  <div class="section-head">{{ selected if selected else "All Time" }} — Overview</div>
+  <div class="stat-grid" style="margin-top:.8rem">
+    <div class="stat-box"><div class="val">{{ stats.totalMatches }}</div><div class="lbl">Matches</div></div>
+    <div class="stat-box"><div class="val">{{ stats.totalRuns }}</div><div class="lbl">Total Runs</div></div>
+    <div class="stat-box"><div class="val">{{ stats.totalWickets }}</div><div class="lbl">Wickets</div></div>
+    <div class="stat-box"><div class="val">{{ stats.totalSixes }}</div><div class="lbl">Sixes</div></div>
+    <div class="stat-box"><div class="val">{{ stats.totalFours }}</div><div class="lbl">Fours</div></div>
+  </div>
+
+  {% if stats.champions %}
+  <div class="section-head" style="margin-top:1.5rem">
+    {% if selected %}Champion{% else %}Champions{% endif %}
+  </div>
+  <table style="margin-top:.8rem">
+    <thead><tr><th>Season</th><th>Champion</th></tr></thead>
+    <tbody>
+      {% for season, winner in stats.champions.items()|sort %}
+      <tr>
+        <td><span class="badge">{{ season }}</span></td>
+        <td>{{ winner }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% endif %}
+
+  {% if top %}
+  <div class="section-head" style="margin-top:1.5rem">Top Batsmen</div>
+  <table style="margin-top:.8rem">
+    <thead><tr><th>#</th><th>Player</th><th>Runs</th></tr></thead>
+    <tbody>
+      {% for p in top.topBatsmen %}
+      <tr>
+        <td style="color:var(--muted)">{{ loop.index }}</td>
+        <td>{{ p.name }}</td>
+        <td style="color:var(--accent);font-weight:500">{{ p.runs }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="section-head" style="margin-top:1.5rem">Top Bowlers</div>
+  <table style="margin-top:.8rem">
+    <thead><tr><th>#</th><th>Player</th><th>Wickets</th></tr></thead>
+    <tbody>
+      {% for p in top.topBowlers %}
+      <tr>
+        <td style="color:var(--muted)">{{ loop.index }}</td>
+        <td>{{ p.name }}</td>
+        <td style="color:var(--accent);font-weight:500">{{ p.wickets }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="section-head" style="margin-top:1.5rem">Most Player of the Match</div>
+  <table style="margin-top:.8rem">
+    <thead><tr><th>#</th><th>Player</th><th>Awards</th></tr></thead>
+    <tbody>
+      {% for p in top.topPlayerOfMatch %}
+      <tr>
+        <td style="color:var(--muted)">{{ loop.index }}</td>
+        <td>{{ p.name }}</td>
+        <td style="color:var(--accent);font-weight:500">{{ p.awards }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

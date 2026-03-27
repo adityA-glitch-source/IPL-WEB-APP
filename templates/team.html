@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Team Record — IPL Stats{% endblock %}
+{% block content %}
+<h1 class="page-title">Team <span>Record</span></h1>
+
+<div class="card">
+  <form method="get" action="/team">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Select Team</label>
+        <select name="team">
+          <option value="">-- Choose Team --</option>
+          {% for t in teams %}
+          <option {% if t == selected %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn">View Record</button>
+    </div>
+  </form>
+
+  {% if result %}
+  <div class="section-head">{{ selected }} — Overall</div>
+  <div class="stat-grid" style="margin-top:.8rem">
+    <div class="stat-box">
+      <div class="val">{{ result.overall.matchesPlayed }}</div>
+      <div class="lbl">Matches</div>
+    </div>
+    <div class="stat-box">
+      <div class="val" style="color:#4caf7d">{{ result.overall.won }}</div>
+      <div class="lbl">Won</div>
+    </div>
+    <div class="stat-box">
+      <div class="val" style="color:#e05c2a">{{ result.overall.loss }}</div>
+      <div class="lbl">Lost</div>
+    </div>
+    <div class="stat-box">
+      <div class="val" style="color:var(--muted)">{{ result.overall.noResult }}</div>
+      <div class="lbl">No Result</div>
+    </div>
+    <div class="stat-box">
+      <div class="val" style="color:var(--accent)">{{ result.overall.titles }}</div>
+      <div class="lbl">Titles</div>
+    </div>
+  </div>
+
+  {% if result.against %}
+  <div class="section-head" style="margin-top:1.5rem">Record vs Each Team</div>
+  <table style="margin-top:.8rem">
+    <thead>
+      <tr>
+        <th>Opponent</th>
+        <th>Played</th>
+        <th>Won</th>
+        <th>Lost</th>
+        <th>NR</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for opp, rec in result.against.items()|sort %}
+      {% if rec.matchesPlayed > 0 %}
+      <tr>
+        <td>{{ opp }}</td>
+        <td>{{ rec.matchesPlayed }}</td>
+        <td style="color:#4caf7d">{{ rec.won }}</td>
+        <td style="color:#e05c2a">{{ rec.loss }}</td>
+        <td style="color:var(--muted)">{{ rec.noResult }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
