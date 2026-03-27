@@ -1,6 +1,8 @@
 # IPL Web App
 
-A Flask web application displaying IPL statistics for the 2008–2022 seasons. Built on top of the [IPL API](https://github.com/yourusername/ipl_api) with a dark-themed UI, real-time data rendering, and modular Flask routing.
+A Flask web application displaying IPL statistics for the 2008–2022 seasons. Built on top of the [IPL API](https://ipl-api-t4ek.onrender.com) with a dark-themed UI, real-time data rendering, and modular Flask routing.
+
+**Live App:** https://ipl-webapp.onrender.com
 
 ## Tech Stack
 
@@ -19,13 +21,13 @@ A Flask web application displaying IPL statistics for the 2008–2022 seasons. B
 | `/bowler` | Bowler career stats + performance vs each team |
 | `/season` | Season overview — runs, wickets, top performers |
 
-## Setup
+## Setup (Local)
 
 This app depends on the IPL API running locally. Start the API first:
 
 ```bash
 # Terminal 1 — API (port 5000)
-cd ipl_api
+cd IPL_API
 python app.py
 
 # Terminal 2 — Web app (port 8080)
