@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-API_BASE = 'https://ipl-api-t4ek.onrender.com'
+API_BASE = 'https://ipl-api-t4ek.onrender.com/api'
 
 
 def _get(endpoint, params=None):
